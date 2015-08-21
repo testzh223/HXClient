@@ -11,9 +11,9 @@
     </ion-nav-title>
 
     <ion-content class="content-stable"  on-swipe-right="onSwipeRight()"  on-swipe-left="onSwipeLeft()">
-        <div ng-repeat="x in HXUI.chats[HXUI.chatTarget.Account]" style="margin-top:10px;width:100%;float:left;">
-            <div ng-style="getStyle(x)">{{x.Text}}</div>
-            <span ng-style="getStyle2()">{{moment(x.Update,'x').fromNow()}}</span>
+        <div ng-repeat="x in HXUI.chats[HXUI.chatTarget.Account]"  style="margin-top:15px;width:100%;float:left">
+            <div ng-style="getStyle(x)" style="vertical-align:top">{{x.Text}}</div>
+            <div ng-style="getStyle2()" style="vertical-align:top">{{moment(x.Update,'x').fromNow()}}</div>
         </div>
     </ion-content>
 

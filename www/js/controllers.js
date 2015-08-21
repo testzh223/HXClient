@@ -42,6 +42,10 @@ angular.module('HXControllers', ['HXServices', 'firebase', 'ionic'])
                             FBRef.onDisconnect().update({Online: 'off'});
                             $rootScope.userInfo.$loaded()
                                 .then(function (data) {
+                                    if(window.plugins && window.plugins.jPushPlugin)
+                                    {
+                                        window.plugins.jPushPlugin.setAlias($rootScope.userInfo.Account);
+                                    }
                                     $ionicLoading.hide();
                                     $rootScope.jumpTo('tab.meet');
                                 })
@@ -111,7 +115,7 @@ angular.module('HXControllers', ['HXServices', 'firebase', 'ionic'])
             }
         }
     })
-    .controller('TabsCtrl', function ($scope, $rootScope, $ionicPopup, GPS, myHttp, $firebaseObject, $ionicHistory, $state) {
+    .controller('TabsCtrl', function ($scope, $rootScope, $ionicPopup, GPS, myHttp, $firebaseObject, $ionicHistory, $state,$ionicScrollDelegate,$timeout) {
 
         FBRef.child('ValidToken').on('value', function (data) {
             //console.log(data.val() + " // " + $rootScope.ValidToken);
@@ -202,7 +206,12 @@ angular.module('HXControllers', ['HXServices', 'firebase', 'ionic'])
             for(d1 in d)
             {
                 $rootScope.HXUI.chats[d1]=d[d1];
-                console.log(d1);
+            }
+            if($state.$current=='tab.chat')
+            {
+                $timeout(function() {
+                    $ionicScrollDelegate.scrollBottom(true);
+                }, 300);
             }
         })
 
@@ -399,6 +408,15 @@ angular.module('HXControllers', ['HXServices', 'firebase', 'ionic'])
 
         $scope.logOut = function () {
             FBRef.update({Online: 'off'});
+            if(window.plugins.jPushPlugin)
+            {
+                window.plugins.jPushPlugin.setAlias('*');
+            }
+            myHttp.do('p','logout',
+                {
+                    Account:$rootScope.userInfo.Account,
+                    Password:$rootScope.userInfo.Password
+                },function(){},function(){});
             quitHX($rootScope, GPS, $ionicHistory);
         }
 
@@ -1039,7 +1057,8 @@ angular.module('HXControllers', ['HXServices', 'firebase', 'ionic'])
                         'position': 'relative',
                         'left': '35%',
                         'text-align': 'right',
-                        'font-size': '25px'
+                        'font-size': '20px',
+                        'display': 'inline-block'
                     };
                 else
                     return {
@@ -1048,9 +1067,10 @@ angular.module('HXControllers', ['HXServices', 'firebase', 'ionic'])
                         'width': '65%',
                         'color': 'blue',
                         'position': 'relative',
-                        'left': '20%',
+                        'left': '15%',
                         'text-align': 'right',
-                        'font-size': '25px'
+                        'font-size': '20px',
+                        'display': 'inline-block'
                     };
             }
             else {
@@ -1063,7 +1083,8 @@ angular.module('HXControllers', ['HXServices', 'firebase', 'ionic'])
                     'position': 'relative',
                     'left': '0%',
                     'text-align': 'left',
-                    'font-size': '25px'
+                    'font-size': '20px',
+                    'display': 'inline-block'
                 };
             }
         }
@@ -1077,7 +1098,9 @@ angular.module('HXControllers', ['HXServices', 'firebase', 'ionic'])
                     'float': 'right',
                     'font-size': '12px',
                     'color': 'black',
-                    'position': 'relative'
+                    'position': 'relative',
+                    'display': 'inline',
+                    'top' : 'inherit'
                 };
         }
 

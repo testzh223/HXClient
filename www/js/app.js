@@ -7,7 +7,7 @@
 // 'starter.controllers' is found in controllers.js
 angular.module('starter', ['ionic', 'HXControllers', 'HXServices'])
 
-    .run(function ($ionicPlatform, $state, $rootScope, $interval) {
+    .run(function ($ionicPlatform, $state, $rootScope, $interval, $ionicScrollDelegate) {
 
         moment.locale('zh-cn');
         $rootScope.jumpTo = function (state) {
@@ -41,10 +41,12 @@ angular.module('starter', ['ionic', 'HXControllers', 'HXServices'])
             }
 
             $rootScope.$on('$ionicView.beforeEnter', function () {
-                if ($state.$current.name == 'tab.chat') {
-                    cordova.plugins.Keyboard.disableScroll(true);
-                } else {
-                    cordova.plugins.Keyboard.disableScroll(false);
+                if (window.cordova && window.cordova.plugins) {
+                    if ($state.$current.name == 'tab.chat') {
+                        cordova.plugins.Keyboard.disableScroll(true);
+                    } else {
+                        cordova.plugins.Keyboard.disableScroll(false);
+                    }
                 }
             });
         });
