@@ -44,6 +44,7 @@ angular.module('HXControllers', ['HXServices', 'firebase', 'ionic'])
                                 .then(function (data) {
                                     if(window.plugins && window.plugins.jPushPlugin)
                                     {
+                                        console.log('Set alias '+$rootScope.userInfo.Account);
                                         window.plugins.jPushPlugin.setAlias($rootScope.userInfo.Account);
                                     }
                                     $ionicLoading.hide();
@@ -158,6 +159,16 @@ angular.module('HXControllers', ['HXServices', 'firebase', 'ionic'])
                         template: '您已经与' + d.name + '成功成为好友，是否前去聊天?'
                     });
                     confirmPopup.then(function (res) {
+                        $rootScope.HXUI.chatTarget = {Account: d.Account,Name: d.name};
+                        if($rootScope.HXUI.chats[d.Account])
+                        {
+                        }
+                        else
+                        {
+                            $rootScope.HXUI.chats[d.Account]=[];
+                        }
+                        $rootScope.HXUI.hideTab=true;
+                        $rootScope.jumpTo('tab.chat');
                     });
                 }
             }
@@ -1030,7 +1041,7 @@ angular.module('HXControllers', ['HXServices', 'firebase', 'ionic'])
 
         $scope.back = function()
         {
-            $rootScope.hideTab=false;
+            $rootScope.HXUI.hideTab=false;
             $rootScope.jumpTo('tab.friend');
         }
 
